@@ -46,22 +46,11 @@ router.get("/:id", validateUserId, (req, res) => {
   return res.status(200).json(req.user);
 });
 
-router.get("/:id/posts", (req, res) => {
+router.get("/:id/posts", validateUserId, (req, res) => {
   // do your magic!
-  Users.getById(req.params.id)
-    .then((user) => {
-      if (user) {
-        Users.getUserPosts(user.id)
-          .then((post) => {
-            res.status(200).json(post);
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).json({ error: "Error with database" });
-          });
-      } else {
-        res.status(400).json({ message: "Can't find user" });
-      }
+  Users.getUserPosts(req.params.id)
+    .then((post) => {
+      res.status(200).json(post);
     })
     .catch((err) => {
       console.log(err);
