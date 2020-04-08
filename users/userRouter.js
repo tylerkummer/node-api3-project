@@ -7,14 +7,38 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   // do your magic!
+  Users.insert(req.body)
+    .then((user) => {
+      res.status(201).json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Error with database" });
+    });
 });
 
 router.post("/:id/posts", (req, res) => {
   // do your magic!
+  Posts.insert(req.body)
+    .then((post) => {
+      res.status(201).post;
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Error with database" });
+    });
 });
 
 router.get("/", (req, res) => {
   // do your magic!
+  Users.get()
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Error with database" });
+    });
 });
 
 router.get("/:id", (req, res) => {
