@@ -43,7 +43,7 @@ router.get("/", (req, res) => {
 
 router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
-  return res.status(200).json(req.user);
+  res.status(200).json(req.user);
 });
 
 router.get("/:id/posts", validateUserId, (req, res) => {
@@ -86,19 +86,18 @@ router.put("/:id", validateUserId, validateUser, (req, res) => {
 
 function validateUserId(req, res, next) {
   // do your magic!
-  if (req.params.id) {
-    Users.getById(req.params.id)
-      .then((user) => {
-        req.user = user;
-        next();
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({ error: "Error with database" });
-      });
-  } else {
-    res.status(400).json({ message: "invalid user id" });
-  }
+  Users.getById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        res.status(400).json({ message: "invalid user id" });
+      }
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Error with database" });
+    });
 }
 
 function validateUser(req, res, next) {
